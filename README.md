@@ -1,7 +1,10 @@
+
 Centos-Backup-Script
 ====================
 
-The purpose of this script is to create daily backup archives (`tar.gz`) of selected directories/files and/or MYSQL dumps.
+**注意：** 自用，已经移除sql备份脚本
+
+The purpose of this script is to create daily backup archives (`tar.gz`) of selected directories/files.
 
 > NOTE: This script is intended for expert users, 
 please read carefully the script and the instructions and use it at your own risk.
@@ -9,7 +12,6 @@ please read carefully the script and the instructions and use it at your own ris
 This script support:
 
 * Backup selected directories & files.
-* Backup selected MySQL Databases dump.
 * Compress and archive all into one `.tar.gz` file.
 * Create .tgz in a backup folder for each backup session.
 * Delete older backups and keep only the latest backups (6 by default).
