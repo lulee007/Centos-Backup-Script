@@ -73,24 +73,6 @@ function shiftBackups {
     done
 }
 
-function dumpSQL {
-    printf "Regenerating DB list file.. ";
-    if $WRITE_CHANGES ; then
-        mysql -u $SQL_USER -p$SQL_PASSWD -Bse 'show databases' > $listfile
-        printf "Dumping SQL Databases.. ";
-        cat $listfile | while read line
-        do
-            dbname=$line
-            if [ $line != "information_schema" ] ;
-            then
-                mysqldump --events --ignore-table=mysql.events -u $SQL_USER -p$SQL_PASSWD $dbname > $tempdir/$dbname.sql
-            fi
-        done
-        printf "Ok\n"
-    else printf "Skipping\n"
-    fi;
-}
-
 function createBackup {
     echo "Creating TGZ Backup file for..";
     echo "directories:"
@@ -106,10 +88,6 @@ function createBackup {
             done
             break
         done
-    echo "databases"
-    if $WRITE_CHANGES ; then
-        tar zcfP $tempdir/db.$filename $tempdir/*.sql > $workdir/log/db.$filename
-    fi;
 }
 
 function moveBackup {
@@ -149,13 +127,11 @@ function startBackup {
         deleteOldestBackup $BACKUP_COPIES
         # step 2: shift the middle snapshots(s) back by one, if they exist
         shiftBackups
-        # step 3: dump sql dbs
-        dumpSQL
-        # step 4: create new backup
+        # step 3: create new backup
         createBackup
-        # step 5: move to location 0
+        # step 4: move to location 0
         moveBackup
-        # step 6: clear temp for the next run
+        # step 5: clear temp for the next run
         cleanBackup
     fi;
 }
